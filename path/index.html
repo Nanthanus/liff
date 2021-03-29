@@ -6,6 +6,7 @@
   <title>Path</title>
   <link rel="stylesheet" href="css/style.css" media="all">
 </head>
+
 <body>
   <h1>Hello World!</h1>
   <p id="param"><b>Query Param: </b></p>
@@ -14,11 +15,36 @@
   <p id="displayName"><b>displayName:</b> </p>
   <p id="statusMessage"><b>statusMessage:</b> </p>
   <p id="decodedIDToken"><b>email:</b> </p>
+
   <script>
     // Query Params
     const queryString = decodeURIComponent(window.location.search);
     const params = new URLSearchParams(queryString);
     document.getElementById("param").append(params.get("param"));
   </script>
+
+  <script src="https://static.line-scdn.net/liff/edge/2.1/sdk.js"></script>
+
+  <script>
+      async function getUserProfile() {
+      const profile = await liff.getProfile()
+      document.getElementById("pictureUrl").src = profile.pictureUrl
+      document.getElementById("userId").append(profile.userId)
+      document.getElementById("statusMessage").append(profile.statusMessage)
+      document.getElementById("displayName").append(profile.displayName)
+      document.getElementById("DecodedIDToken").append(liff.getDecodedIDToken().email)
+    }
+    async function main() {
+      await liff.init({ liffId: "1655771376-524vKylJ" })
+      if (liff.isLoggedIn()) {
+        getUserProfile()
+      }
+      else {
+        liff.login({ redirectUri: "https://nanthanus.github.io/liff/path"})
+      }
+    }
+
+  </script>
+
 </body>
 </html>
